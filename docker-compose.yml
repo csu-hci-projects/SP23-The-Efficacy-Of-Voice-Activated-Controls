@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  voice_control_db:
+    image: postgres:13
+    restart: always
+    container_name: voice_control_db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - PGDATA=/var/lib/postgresql/data
+    user: postgres
+    ports:
+      - '5052:5052'
+    volumes:
+      - voice_control_db:/var/lib/postgresql/data
+  voice_control_frontend:
+    container_name: voice_control_frontend
+    build:
+      context: .
+      # prod build - compiles and builds a minimized form on nginx
+      # dockerfile: frontend-prod.Dockerfile
+      # dev/test uses ng serve on local cli
+      dockerfile: frontend.Dockerfile
+    volumes:
+      - './frontend:/frontend'
+      - '/frontend/node_modules'
+    ports:
+      # prod port binding
+      # - "8080:80"
+      # dev port binding
+      - '4200:4200'
+  voice_control_api:
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+    container_name: voice_control_api
+    user: root
+    volumes:
+      - ./api:/api
+    # entrypoint: watchmedo auto-restart --recursive --pattern="*.py" --directory="." python voice_control_api.py
+    ports:
+      - '5000:5000'
+    depends_on:
+      - voice_control_db
+volumes:
+  voice_control_db:
+    driver: local
