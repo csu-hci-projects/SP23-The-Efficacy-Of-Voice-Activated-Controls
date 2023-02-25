@@ -34,7 +34,7 @@ use docker desktop to view containers or navigate browser to:
   $ docker exec -it <your-postgres-container-id> bash
   $ psql -d postgres -U postgres
 
-DB will retain volume
+***working with DB to retain volume***
 
 # To run frontend locally on dev
 
