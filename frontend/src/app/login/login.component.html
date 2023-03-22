@@ -27,7 +27,7 @@
 							letter, one number, and one special character
 						</mat-error>
 					</mat-form-field>
-					<button mat-raised-button color="primary" (click)="login()">Sign In</button>
+					<button mat-raised-button color="primary" (click)="login()" routerLink="test1">Sign In</button>
 					<div class="mt-2">Don't have an account? <a href="#" (click)="selectedTabIndex = 1">Register</a></div>
 				</div>
 			</mat-tab>
@@ -64,7 +64,7 @@
 							letter, one number, and one special character
 						</mat-error>
 					</mat-form-field>
-					<button mat-raised-button color="primary" (click)="register()">Sign In</button>
+					<button mat-raised-button color="primary" (click)="register()" routerLink="test1">Sign In</button>
 					<div class="mt-2">Already have an account? <a href="#" (click)="selectedTabIndex = 0">Sign In</a></div>
 				</div>
 			</mat-tab>
