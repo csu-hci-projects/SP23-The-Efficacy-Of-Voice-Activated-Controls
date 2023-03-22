@@ -14,11 +14,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { Test1Component } from './test1/test1.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 
-const appRoutes: Routes = [{ path: '', component: LoginComponent }];
+const appRoutes: Routes = [
+	{ path: '', component: LoginComponent },
+	{ path: 'test1', component: Test1Component },
+];
 
 @NgModule({
-	declarations: [AppComponent, LoginComponent, ToolbarComponent],
+	declarations: [AppComponent, LoginComponent, ToolbarComponent, Test1Component],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
@@ -33,6 +38,7 @@ const appRoutes: Routes = [{ path: '', component: LoginComponent }];
 		MatInputModule,
 		RouterModule.forRoot(appRoutes),
 		MatTabsModule,
+		MatGridListModule,
 	],
 	providers: [VoiceControlService],
 	bootstrap: [AppComponent],
