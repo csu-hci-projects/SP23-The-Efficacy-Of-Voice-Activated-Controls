@@ -34,7 +34,7 @@ use docker desktop to view containers or navigate browser to:
   $ docker exec -it <your-postgres-container-id> bash
   $ psql -d postgres -U postgres
 
-***working with DB to retain volume***
+**_working with DB to retain volume_**
 
 # To run frontend locally on dev
 
@@ -44,12 +44,13 @@ run "npm install" on cli/gitbash
 
 run "ng serve" on cli/gitbash
 
-***Task List for the application***
-- User Sign in - frontend form - Justin 
+**_Task List for the application_**
+
+- User Sign in - frontend form - Justin DONE ✓
 - user sign in - middleware api call - Camden
 - user sign in - backend table - Kimeron
 - education step page - frontend - Andrew
-- game implementation 1 mouse - frontend
+- game implementation 1 mouse - frontend - Justin DONE ✓
 - voice command implementation - frontend
 - game implementation 2 VC - frontend
 - session metrics - frontend
