@@ -49,7 +49,7 @@ run "ng serve" on cli/gitbash
 - User Sign in - frontend form - Justin DONE ✓
 - user sign in - middleware api call - Camden
 - user sign in - backend table - Kimeron
-- education step page - frontend - Andrew
+- education step page - frontend - Justin DONE ✓
 - game implementation 1 mouse - frontend - Justin DONE ✓
 - voice command implementation - frontend
 - game implementation 2 VC - frontend
