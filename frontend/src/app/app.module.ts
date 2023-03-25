@@ -16,14 +16,26 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Test1Component } from './test1/test1.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
+import { SimonComponent } from './simon/simon.component';
+import { InstructionsComponent } from './instructions/instructions.component';
 
 const appRoutes: Routes = [
 	{ path: '', component: LoginComponent },
+	{ path: 'instructions', component: InstructionsComponent },
 	{ path: 'test1', component: Test1Component },
 ];
 
 @NgModule({
-	declarations: [AppComponent, LoginComponent, ToolbarComponent, Test1Component],
+	declarations: [
+		AppComponent,
+		LoginComponent,
+		ToolbarComponent,
+		Test1Component,
+		TicTacToeComponent,
+		SimonComponent,
+		InstructionsComponent,
+	],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,

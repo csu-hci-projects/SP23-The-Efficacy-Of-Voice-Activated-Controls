@@ -1,0 +1,26 @@
+<mat-card class="instructions">
+	<header>
+		<mat-card-title>Welcome!</mat-card-title>
+	</header>
+	<mat-card-content>
+		<strong>Purpose:</strong>
+		<p>This experiment is to measure the efficacy and accuracy of voice control versus mouse input.</p>
+		<strong>Contents:</strong>
+		<p>
+			There will be a two tests followed by a survey. Each test will be administered by playing the classic game Simon
+			Says.
+		</p>
+		<strong>Game Rules:</strong>
+		<p>
+			There are four buttons arranged in a square. Each button has a different color and tone associated with it. When
+			you are ready, click <strong>Start Game</strong> to begin. The game will display a sequence of colors in a
+			specific order. It is your job to memorize and select those colors in whatever order it asks as accurately and
+			quickly as possible. The game will start with one color and increase by 1 with each successful iteration. You have
+			3 attempts to achieve a high score round of a given sequence. With each incorrect entry, you lose an attempt.
+			After 3 attempts you will move on to the next portion of the experiment.
+		</p>
+	</mat-card-content>
+	<mat-card-actions>
+		<button mat-raised-button (click)="continue()" routerLink="/test1"><b>I am ready to proceed</b></button>
+	</mat-card-actions>
+</mat-card>

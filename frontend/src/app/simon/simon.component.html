@@ -1,0 +1,20 @@
+<mat-card class="simon-game">
+	<mat-card-header>
+		<div *ngIf="gameState === 'playingSequence'" class="user-message">Sequence is playing...</div>
+		<div *ngIf="gameState === 'awaitingInput'" class="user-message">Your turn. Click the squares!</div>
+	</mat-card-header>
+	<div class="board">
+		<div class="square" [class.active]="activeColor === 0" (click)="clickSquare(0)"></div>
+		<div class="square" [class.active]="activeColor === 1" (click)="clickSquare(1)"></div>
+		<div class="square" [class.active]="activeColor === 2" (click)="clickSquare(2)"></div>
+		<div class="square" [class.active]="activeColor === 3" (click)="clickSquare(3)"></div>
+	</div>
+	<div class="user-message">{{ userMessage }}</div>
+	<mat-card-actions>
+		<button mat-flat-button disabled="true">Level: {{ counter }}</button>
+		<button mat-flat-button disabled="true" *ngIf="gameInProgress" class="lives-remaining">
+			Lives remaining: {{ livesRemaining }}
+		</button>
+		<button mat-raised-button *ngIf="!gameInProgress" (click)="startGame()">Start</button>
+	</mat-card-actions>
+</mat-card>
