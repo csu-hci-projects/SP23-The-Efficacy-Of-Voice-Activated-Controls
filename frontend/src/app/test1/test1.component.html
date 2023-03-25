@@ -1,13 +1,4 @@
-<div class="tic-tac-toe-board">
-	<p *ngIf="gameOver" class="game-over-message">
-		{{ winner ? 'Player ' + winner + ' wins!' : "It's a draw!" }}
-	</p>
-	<mat-grid-list cols="3" rowHeight="1:1">
-		<mat-grid-tile *ngFor="let cell of board; index as i">
-			<button mat-button class="tic-tac-toe-cell" [disabled]="cell || gameOver" (click)="makeMove(i)">
-				{{ cell }}
-			</button>
-		</mat-grid-tile>
-	</mat-grid-list>
-	<button mat-raised-button *ngIf="winner === null && gameOver" (click)="reset()">Play Again</button>
+<div class="container">
+	<h1>First Test: Mouse Input</h1>
+	<app-simon></app-simon>
 </div>
