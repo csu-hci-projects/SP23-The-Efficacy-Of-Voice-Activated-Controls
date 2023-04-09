@@ -18,3 +18,4 @@
 		<button mat-raised-button *ngIf="!gameInProgress" (click)="startGame()">Start</button>
 	</mat-card-actions>
 </mat-card>
+<div *ngIf="currentCommand">current command: {{ currentCommand }}</div>

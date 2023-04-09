@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
 	selector: 'app-simon',
 	templateUrl: './simon.component.html',
 	styleUrls: ['./simon.component.css'],
 })
-export class SimonComponent {
+export class SimonComponent implements OnChanges {
 	sequence: number[] = [];
 	playerSequence: number[] = [];
 	activeColor: number | null = null;
@@ -14,6 +14,14 @@ export class SimonComponent {
 	gameState: 'idle' | 'playingSequence' | 'awaitingInput' = 'idle';
 	livesRemaining: number = 3;
 	gameInProgress: boolean = false;
+	@Input() currentCommand: string[] = [];
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['currentCommand'] && !changes['currentCommand'].firstChange) {
+			console.log('currentCommand changed:', changes['currentCommand'].currentValue);
+			// Add any additional logic to handle the change in the currentCommand
+		}
+	}
 
 	delay(ms: number) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
