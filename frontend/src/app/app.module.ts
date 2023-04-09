@@ -19,11 +19,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 import { SimonComponent } from './simon/simon.component';
 import { InstructionsComponent } from './instructions/instructions.component';
+import { Test2Component } from './test2/test2.component';
 
 const appRoutes: Routes = [
 	{ path: '', component: LoginComponent },
 	{ path: 'instructions', component: InstructionsComponent },
 	{ path: 'test1', component: Test1Component },
+	{ path: 'test2', component: Test2Component },
 ];
 
 @NgModule({
@@ -35,6 +37,7 @@ const appRoutes: Routes = [
 		TicTacToeComponent,
 		SimonComponent,
 		InstructionsComponent,
+		Test2Component,
 	],
 	imports: [
 		BrowserModule,
