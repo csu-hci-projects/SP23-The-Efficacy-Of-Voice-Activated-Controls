@@ -1,10 +1,11 @@
 <div class="container">
 	<mat-card>
-		<mat-card-title>Welcome! Please Register to Participate</mat-card-title>
+		<mat-card-title>Register to Participate</mat-card-title>
+		<mat-card-content>
 		<mat-tab-group class="tab" color="primary">
 			
 			<mat-tab label="Register">
-				<div [formGroup]="registerForm" class="form" (ngSubmit)="register()">
+				<form [formGroup]="registerForm" class="form" (ngSubmit)="register()">
 					<mat-form-field class="field-item">
 						<input matInput placeholder="First Name" formControlName="firstName" name="firstName" required />
 						<mat-error *ngIf="registerForm.controls['firstName'].invalid"> Please enter your first name </mat-error>
@@ -38,10 +39,11 @@
 						</mat-error>
 					</mat-form-field>
 					
-					<button mat-raised-button color="primary">Submit</button>
+					<button mat-raised-button type="submit" color="primary">Register</button>
 					<div class="mt-2">Already have an account? <a routerLink="">Sign In</a></div>
-				</div>
+				</form>
 			</mat-tab>
 		</mat-tab-group>
+		</mat-card-content>
 	</mat-card>
 </div>
