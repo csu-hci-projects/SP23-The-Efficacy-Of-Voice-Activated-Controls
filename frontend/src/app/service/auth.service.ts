@@ -8,13 +8,13 @@ export class AuthService {
 
   constructor(private http:HttpClient) { }
 
-  apiurl='http://127.0.0.1:3000/users';
+  apiurl='http://localhost:3000/users';
 
   Getall(){
     return this.http.get(this.apiurl);
   }
 
-  Getbyuser(username:any){
+  Getuser(username:any){
     return this.http.get(this.apiurl +'/'+ username);
   }
 
