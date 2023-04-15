@@ -32,10 +32,10 @@ export class RegisterComponent {
       });
     }
 
-    register() {
+    register(data:any) {
       if (this.registerForm.valid) {
         this.service.Registeruser(this.registerForm.value).subscribe(result => {
-        this.toastr.success('Please contact admin for enable access.','Registered successfully')
+        this.toastr.success('Registered successfully')
         this.router.navigate([''])
         this.VoiceControlService.sendRegistrationInfo(this.registerForm.value);
       });

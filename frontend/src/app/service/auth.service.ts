@@ -10,15 +10,16 @@ export class AuthService {
 
   apiurl='http://localhost:3000/users';
 
+  Registeruser(inputdata:any){
+    return this.http.post(this.apiurl,inputdata)
+  }
+
   Getall(){
     return this.http.get(this.apiurl);
   }
 
-  Getuser(username:any){
-    return this.http.get(this.apiurl +'/'+ username);
+  GetID(id:any){
+    return this.http.get(this.apiurl+'/'+id);
   }
-
-  Registeruser(inputdata:any){
-    return this.http.post(this.apiurl,inputdata)
-  }
+  
 }

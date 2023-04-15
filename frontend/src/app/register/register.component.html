@@ -5,7 +5,7 @@
 		<mat-tab-group class="tab" color="primary">
 			
 			<mat-tab label="Register">
-				<form [formGroup]="registerForm" class="form" (ngSubmit)="register()">
+				<form [formGroup]="registerForm" class="form" (ngSubmit)="register(registerForm.value)">
 					<mat-form-field class="field-item">
 						<input matInput placeholder="First Name" formControlName="firstName" name="firstName" required />
 						<mat-error *ngIf="registerForm.controls['firstName'].invalid"> Please enter your first name </mat-error>

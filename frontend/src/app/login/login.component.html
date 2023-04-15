@@ -1,9 +1,11 @@
 <div class="container">
 	<mat-card class="card">
 		<mat-card-title>Welcome! Please Login to Participate</mat-card-title>
+		<mat-card-content>
 		<mat-tab-group class="tab" color="primary">
+			
 			<mat-tab label="Sign In">
-				<div [formGroup]="loginForm" class="form" (ngSubmit)="login()">
+				<form [formGroup]="loginForm" class="form" (ngSubmit)="login(loginForm.value)">
 					<mat-form-field class="field-item">
 						<input matInput placeholder="Username" formControlName="username" name="username" required />
 						<mat-error *ngIf="loginForm.controls['username'].invalid"> Please enter your username </mat-error>
@@ -21,11 +23,12 @@
 						<mat-error *ngIf="loginForm.controls['password'].invalid"> Please enter your password </mat-error>
 						
 					</mat-form-field>
-					<button mat-raised-button color="primary" (click)="login()">Sign In</button>
+					<button mat-raised-button type="submit" color="primary">Sign In</button>
 					<div class="mt-2">Don't have an account? <a routerLink="/register">Register</a></div>
-				</div>
+				</form>
 			</mat-tab>
 		</mat-tab-group>
+	</mat-card-content>
 	</mat-card>
 </div>
 
