@@ -14,22 +14,17 @@ export class RegisterComponent {
 
 	ngOnInit() {
 		this.registerForm = this.fb.group({
-			firstName: ['', Validators.required],
-			lastName: ['', Validators.required],
-			username: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{5,}$/)]],
-			password: [
-				'',
-				[
-					Validators.required,
-					Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
-				],
-			],
+			firstName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z]+$/)]],
+			lastName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z]+$/)]],
 		});
 	}
 
 	register() {
 		if (this.registerForm.valid) {
-			this.VoiceControlService.sendRegistrationInfo(this.registerForm.value);
+			let response = this.VoiceControlService.sendRegistrationInfo(this.registerForm.value);
+			response.subscribe((res) => {
+				console.log('completed.');
+			});
 		}
 	}
 }

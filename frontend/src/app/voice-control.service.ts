@@ -1,16 +1,30 @@
 import { Injectable, Input } from '@angular/core';
 import { SpeechRecognition, SpeechRecognitionEvent } from 'global';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class VoiceControlService {
+	private baseUrl = 'http://localhost:5000';
 	recognition: SpeechRecognition | null = null;
 	silenceTimeout: any = null;
 
-	constructor() {
+	constructor(private http: HttpClient) {
 		this.initializeRecognition();
+	}
+
+	sendRegistrationInfo(registration: any) {
+		console.log('registering: ' + JSON.stringify(registration));
+		const url = `${this.baseUrl}/add_user?first_name=${registration.firstName}&last_name=${registration.lastName}`;
+		return this.http.post(url, null).pipe(
+			catchError((error) => {
+				alert('Error Registering. Please contact your test administrator. Detail: ' + error.error.detail);
+				console.error(error);
+				return of(error);
+			})
+		);
 	}
 
 	initializeRecognition(): void {
@@ -30,16 +44,6 @@ export class VoiceControlService {
 		// 	this.recognition.interimResults = false;
 		// 	this.recognition.continuous = false;
 		// }
-	}
-
-	sendLoginInfo(login: any) {
-		//TODO write call here when complete
-		console.log('sending login! ' + JSON.stringify(login));
-	}
-
-	sendRegistrationInfo(registration: any) {
-		//TODO write call here when complete
-		console.log('sending Registration! ' + JSON.stringify(registration));
 	}
 
 	start(): Observable<string> {
