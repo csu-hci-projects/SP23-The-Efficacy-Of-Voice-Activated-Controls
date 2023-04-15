@@ -12,23 +12,6 @@
 					<input matInput placeholder="Last Name" formControlName="lastName" name="lastName" required />
 					<mat-error *ngIf="registerForm.controls['lastName'].invalid"> Please enter your last name </mat-error>
 				</mat-form-field>
-
-				<!-- <mat-form-field class="field-item">
-					<input matInput placeholder="Username" formControlName="username" name="username" required />
-					<mat-error *ngIf="registerForm.controls['username'].hasError('pattern')">
-						Usernames must be at least 5 characters long and can only contain alphanumeric characters, underscores, and
-						hyphens
-					</mat-error>
-				</mat-form-field>
-
-				<mat-form-field class="field-item">
-					<input matInput type="password" placeholder="Password" formControlName="password" name="password" required />
-					<mat-error *ngIf="registerForm.controls['password'].hasError('pattern')">
-						Passwords must be at least 8 characters long and contain at least one lowercase letter, one uppercase
-						letter, one number, and one special character
-					</mat-error>
-				</mat-form-field> -->
-
 				<button mat-raised-button type="submit" color="primary">Register</button>
 			</form>
 		</mat-card-content>
