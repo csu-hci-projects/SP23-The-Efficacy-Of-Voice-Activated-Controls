@@ -1,6 +1,7 @@
 import { VoiceControlService } from './../voice-control.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-register',
@@ -10,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class RegisterComponent {
 	registerForm!: FormGroup;
 
-	constructor(private fb: FormBuilder, private VoiceControlService: VoiceControlService) {}
+	constructor(private fb: FormBuilder, private VoiceControlService: VoiceControlService, private router: Router) {}
 
 	ngOnInit() {
 		this.registerForm = this.fb.group({
@@ -23,7 +24,10 @@ export class RegisterComponent {
 		if (this.registerForm.valid) {
 			let response = this.VoiceControlService.sendRegistrationInfo(this.registerForm.value);
 			response.subscribe((res) => {
-				console.log('completed.');
+				if (!res.error) {
+					console.log('completed.');
+					this.router.navigate(['/instructions']);
+				}
 			});
 		}
 	}
