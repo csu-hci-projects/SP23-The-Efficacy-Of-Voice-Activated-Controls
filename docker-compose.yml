@@ -11,16 +11,14 @@ services:
       - POSTGRES_PASSWORD=123
       - PGDATA=/var/lib/postgresql/data
     user: postgres
-    volumes:
-      - ./SP23-The-Efficacy-Of-Voice-Activated-Controls/init.sql:/docker-entrypoint-initdb.d/init.sql
     build:
       context: ./SP23-The-Efficacy-Of-Voice-Activated-Controls
       dockerfile: frontend.Dockerfile
     ports:
       - '5432:5432'
     volumes:
-      - voice_control_db:/var/lib/postgresql/data
-
+      # - voice_control_db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   voice_control_frontend:
     container_name: voice_control_frontend
     build:
@@ -38,6 +36,7 @@ services:
       # dev port binding
       - '4200:4200'
   voice_control_api:
+    restart: always
     build:
       context: .
       dockerfile: api.Dockerfile
@@ -45,7 +44,7 @@ services:
     user: root
     volumes:
       - ./api:/api
-    # entrypoint: watchmedo auto-restart --recursive --pattern="*.py" --directory="." python voice_control_api.py
+    entrypoint: watchmedo auto-restart --recursive --pattern="*.py" --directory="." python voice_control_api.py
     ports:
       - '5000:5000'
     depends_on:
