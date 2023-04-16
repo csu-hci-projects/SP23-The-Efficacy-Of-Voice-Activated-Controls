@@ -47,8 +47,8 @@ run "ng serve" on cli/gitbash
 **_Task List for the application_**
 
 - User Sign in - frontend form - Justin DONE ✓
-- user sign in - middleware api call - Camden
-- user sign in - backend table - Kimeron
+- user sign in - middleware api call - Justin - DONE ✓
+- user sign in - backend table - Kimeron - DONE ✓
 - education step page - frontend - Justin DONE ✓
 - game implementation 1 mouse - frontend - Justin DONE ✓
 - voice command implementation - frontend - Justin In progress - 
