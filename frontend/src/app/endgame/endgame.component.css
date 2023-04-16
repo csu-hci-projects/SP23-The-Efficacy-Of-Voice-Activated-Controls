@@ -1,0 +1,6 @@
+.endgame {
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+}

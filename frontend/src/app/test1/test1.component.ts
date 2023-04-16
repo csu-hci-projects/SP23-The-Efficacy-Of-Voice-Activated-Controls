@@ -5,4 +5,11 @@ import { Component, EventEmitter, Output } from '@angular/core';
 	templateUrl: './test1.component.html',
 	styleUrls: ['./test1.component.css'],
 })
-export class Test1Component {}
+export class Test1Component {
+	continue: boolean = false;
+
+	allowUserToContinue(event: any) {
+		console.log('game over in parent: ' + JSON.stringify(event));
+		this.continue = true;
+	}
+}

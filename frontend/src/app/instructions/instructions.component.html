@@ -14,13 +14,22 @@
 		<p>
 			There are four buttons arranged in a square. Each button has a different color and tone associated with it. When
 			you are ready, click <strong>Start Game</strong> to begin. The game will display a sequence of colors in a
-			specific order. It is your job to memorize and select those colors in whatever order it asks as accurately and
-			quickly as possible. The game will start with one color and increase by 1 with each successful iteration. You have
-			3 attempts to achieve a high score round of a given sequence. With each incorrect entry, you lose an attempt.
-			After 3 attempts you will move on to the next portion of the experiment.
+			specific order. It is your job to memorize and select those colors in whatever order it asks as accurately as
+			possible. The game will start with one color and increase by 1 with each successful iteration. You have 3 attempts
+			to achieve a high score round of a given sequence. With each incorrect entry, you lose an attempt. After 3
+			attempts you will move on to the next portion of the experiment.
 		</p>
+		<p>
+			The first test is performed by mouse input and is shown below. After the sequence has finished playing, please
+			click the corresponding pattern you were shown and be sure to click firmly so the tone sounds.
+		</p>
+		<p><b>NOTE:</b> the sequence will play <b>immiediately</b> after pressing start. Make sure you're prepared!</p>
+
+		<div>
+			<img src="../../assets/instrcutions1.jpg" alt="" class="image" />
+		</div>
 	</mat-card-content>
 	<mat-card-actions>
-		<button mat-raised-button (click)="continue()" routerLink="/test1"><b>I am ready to proceed</b></button>
+		<button mat-raised-button (click)="continue()" routerLink="/test1"><b>Click here when ready to proceed</b></button>
 	</mat-card-actions>
 </mat-card>

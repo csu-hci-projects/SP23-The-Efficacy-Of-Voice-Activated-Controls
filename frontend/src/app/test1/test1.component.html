@@ -1,4 +1,5 @@
 <div class="container">
 	<h1>First Test: Mouse Input</h1>
-	<app-simon></app-simon>
+	<app-simon (sendGameOver)="allowUserToContinue($event)"></app-simon>
+	<button mat-raised-button *ngIf="continue" class="button" routerLink="/instructions2">Next</button>
 </div>

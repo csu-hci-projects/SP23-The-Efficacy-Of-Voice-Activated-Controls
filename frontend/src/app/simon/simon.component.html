@@ -15,7 +15,6 @@
 		<button mat-flat-button disabled="true" *ngIf="gameInProgress" class="lives-remaining">
 			Lives remaining: {{ livesRemaining }}
 		</button>
-		<button mat-raised-button *ngIf="!gameInProgress" (click)="startGame()">Start</button>
+		<button mat-raised-button *ngIf="!gameInProgress && !gameOver" (click)="startGame()">Start</button>
 	</mat-card-actions>
 </mat-card>
-<div *ngIf="currentCommand">current command: {{ currentCommand }}</div>

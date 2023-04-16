@@ -38,12 +38,6 @@ export class VoiceControlService {
 			this.recognition.interimResults = false;
 			this.recognition.continuous = false;
 		}
-
-		// Interim mode and continuous
-		// if (this.recognition) {
-		// 	this.recognition.interimResults = false;
-		// 	this.recognition.continuous = false;
-		// }
 	}
 
 	start(): Observable<string> {

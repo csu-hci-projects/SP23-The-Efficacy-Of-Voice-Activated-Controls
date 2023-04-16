@@ -1,0 +1,25 @@
+<mat-card class="instructions">
+	<header>
+		<mat-card-title>Welcome to the voice test</mat-card-title>
+	</header>
+	<mat-card-content>
+		<p>
+			You will notice the game interface has changed slightly. The game will now be played by using your microphone
+			described in the beginning of the experiment. Please reduce background noise and be sure to speak audibly while
+			articulating as best as possible to avoid error. If no speech is detected, your browser will alert you and nothing
+			will be registered. You will press start just as you did in the first step, except now you will have to press
+			record and say the commands "<b>green</b>", "<b>red</b>", "<b>yellow</b>", or "<b>blue</b>"
+		</p>
+		<p>
+			This test is performed by voice input and is shown below. After the sequence has finished playing, please press
+			the record button before speaking.
+		</p>
+		<p><b>NOTE:</b> the sequence will play <b>immiediately</b> after pressing start. Make sure you're prepared!</p>
+		<div>
+			<img src="../../assets/instrcutions2.jpg" alt="" class="image" />
+		</div>
+	</mat-card-content>
+	<mat-card-actions>
+		<button mat-raised-button (click)="continue()" routerLink="/test2"><b>Click here when ready to proceed</b></button>
+	</mat-card-actions>
+</mat-card>

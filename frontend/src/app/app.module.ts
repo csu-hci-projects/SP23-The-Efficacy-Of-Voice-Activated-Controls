@@ -14,6 +14,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/material.module';
 import { RegisterComponent } from './register/register.component';
+import { Instructions2Component } from './instructions2/instructions2.component';
+import { EndgameComponent } from './endgame/endgame.component';
 
 @NgModule({
 	declarations: [
@@ -25,6 +27,8 @@ import { RegisterComponent } from './register/register.component';
 		InstructionsComponent,
 		Test2Component,
 		RegisterComponent,
+		Instructions2Component,
+		EndgameComponent,
 	],
 	imports: [
 		BrowserModule,
