@@ -51,8 +51,8 @@ run "ng serve" on cli/gitbash
 - user sign in - backend table - Kimeron - DONE ✓
 - education step page - frontend - Justin DONE ✓
 - game implementation 1 mouse - frontend - Justin DONE ✓
-- voice command implementation - frontend - Justin In progress - 
-- game implementation 2 VC - frontend - Justin in progress - 
+- voice command implementation - frontend - Justin DONE ✓
+- game implementation 2 VC - frontend - Justin DONE ✓
 - session metrics - frontend
 - session metrics - middleware
 - session metrics - backend
