@@ -1,5 +1,16 @@
 <div class="container">
 	<h1>First Test: Mouse Input</h1>
-	<app-simon (sendGameOver)="allowUserToContinue($event)"></app-simon>
-	<button mat-raised-button *ngIf="continue" class="button" routerLink="/instructions2">Next</button>
+	<app-simon
+		[clickDisabled]="false"
+		(sendGameOver)="allowUserToContinue($event)"
+		[(timerActive)]="timerActive"
+		(timerActiveChange)="onTimerStateChanged($event)"
+	></app-simon>
+	<button mat-raised-button *ngIf="continue" class="button" routerLink="/instructions2" (click)="printScores()">
+		Next
+	</button>
+	<button mat-raised-button (click)="startTimer()" *ngIf="!timerActive && !continue" class="button">
+		Record Command
+	</button>
+	<button mat-raised-button *ngIf="timerActive && !continue" disabled="true" class="button">Timer running</button>
 </div>

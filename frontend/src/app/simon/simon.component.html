@@ -3,11 +3,17 @@
 		<div *ngIf="gameState === 'playingSequence'" class="user-message">Sequence is playing...</div>
 		<div *ngIf="gameState === 'awaitingInput'" class="user-message">Your turn. Click the squares!</div>
 	</mat-card-header>
-	<div class="board">
-		<div class="square" [class.active]="activeColor === 0" (click)="clickSquare(0)"></div>
-		<div class="square" [class.active]="activeColor === 1" (click)="clickSquare(1)"></div>
-		<div class="square" [class.active]="activeColor === 2" (click)="clickSquare(2)"></div>
-		<div class="square" [class.active]="activeColor === 3" (click)="clickSquare(3)"></div>
+	<div class="board" *ngIf="timerActive === true">
+		<div class="square" [class.active]="activeColor === 0" (click)="clickSquare(0)"><div class="number">1</div></div>
+		<div class="square" [class.active]="activeColor === 1" (click)="clickSquare(1)"><div class="number">2</div></div>
+		<div class="square" [class.active]="activeColor === 2" (click)="clickSquare(2)"><div class="number">3</div></div>
+		<div class="square" [class.active]="activeColor === 3" (click)="clickSquare(3)"><div class="number">4</div></div>
+	</div>
+	<div class="board" *ngIf="timerActive === false">
+		<div class="square" [class.active]="activeColor === 0"><div class="number">1</div></div>
+		<div class="square" [class.active]="activeColor === 1"><div class="number">2</div></div>
+		<div class="square" [class.active]="activeColor === 2"><div class="number">3</div></div>
+		<div class="square" [class.active]="activeColor === 3"><div class="number">4</div></div>
 	</div>
 	<div class="user-message">{{ userMessage }}</div>
 	<mat-card-actions>
