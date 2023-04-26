@@ -8,6 +8,7 @@ import {
 	Output,
 	SimpleChanges,
 } from '@angular/core';
+import { VoiceControlService } from './../voice-control.service';
 
 @Component({
 	selector: 'app-simon',
@@ -25,9 +26,12 @@ export class SimonComponent implements OnChanges {
 	gameInProgress: boolean = false;
 	gameOver: boolean = false;
 	@Input() currentCommand: string[] = [];
+	@Input() clickDisabled: boolean = false;
 	@Output() sendGameOver = new EventEmitter<boolean>();
+	@Input() timerActive: boolean = false;
+	@Output() timerActiveChange = new EventEmitter<boolean>();
 
-	constructor(private cdr: ChangeDetectorRef) {}
+	constructor(private cdr: ChangeDetectorRef, public VoiceControlService: VoiceControlService) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['currentCommand'] && !changes['currentCommand'].firstChange) {
@@ -44,19 +48,25 @@ export class SimonComponent implements OnChanges {
 		for (const command of commands) {
 			console.log('processing command: ' + command);
 			switch (command) {
-				case 'green':
+				case '1':
 					await this.clickSquare(0);
 					break;
-				case 'red':
+				case '2':
 					await this.clickSquare(1);
 					break;
-				case 'yellow':
+				case '3':
 					await this.clickSquare(2);
 					break;
-				case 'blue':
+				case '4':
 					await this.clickSquare(3);
 					break;
 				default:
+					alert(
+						'Invalid voice command detected: "' +
+							command +
+							'". If the issue persists be sure to articulate, enunciate between words, and cut down on background noise. Please record again.'
+					);
+					this.VoiceControlService.removeLastTime();
 					break;
 			}
 			await this.delay(500);
@@ -90,7 +100,6 @@ export class SimonComponent implements OnChanges {
 	}
 
 	async clickSquare(color: number) {
-		console.log('color: ' + color);
 		if (this.gameState !== 'awaitingInput') return;
 		this.playerSequence.push(color);
 		this.lightUpSquare(color, 250);
@@ -100,39 +109,43 @@ export class SimonComponent implements OnChanges {
 			await this.incorrectInput();
 		} else if (this.playerSequence.length === this.sequence.length) {
 			this.userMessage = `Round ${this.counter} complete!`;
-			await this.delay(1000);
+			if (this.clickDisabled === false) {
+				this.stopClickTimer();
+			}
+			await this.delay(2000);
 			await this.nextRound();
 		}
-		// this.cdr.detectChanges();
+	}
+
+	stopClickTimer() {
+		console.log('stopping');
+		this.timerActive = false;
+		this.timerActiveChange.emit(this.timerActive);
 	}
 
 	async incorrectInput() {
 		this.livesRemaining--;
 		if (this.livesRemaining <= 0) {
+			if (this.clickDisabled == false) {
+				this.stopClickTimer();
+			}
+			this.VoiceControlService.pushRoundTimes(this.clickDisabled, this.counter);
 			this.userMessage = 'Game Over!';
 			this.gameInProgress = false;
 			this.gameOver = true;
 			this.sendGameOver.emit(true);
 		} else {
 			this.userMessage = `Incorrect input. Lives remaining: ${this.livesRemaining}`;
-			this.sequence = []; // Reset the sequence
-			this.counter = 0; // Reset the counter
-			await this.nextRound(); // Generate a new sequence with one color
+			if (this.clickDisabled == false) {
+				this.stopClickTimer();
+			}
+			this.VoiceControlService.pushRoundTimes(this.clickDisabled, this.counter);
+			this.sequence = [];
+			this.counter = 0;
+			await this.delay(2000);
+			await this.nextRound();
 		}
 	}
-
-	// async incorrectInput() {
-	// 	this.livesRemaining--;
-	// 	if (this.livesRemaining <= 0) {
-	// 		this.userMessage = 'You lost! Thank you for playing!';
-	// 		this.gameInProgress = false;
-	// 		this.gameOver = true;
-	// 		this.sendGameOver.emit(true);
-	// 	} else {
-	// 		this.userMessage = `Incorrect input. Lives remaining: ${this.livesRemaining}`;
-	// 		await this.nextRound();
-	// 	}
-	// }
 
 	async lightUpSquare(color: number, duration: number) {
 		this.activeColor = color;
@@ -143,7 +156,6 @@ export class SimonComponent implements OnChanges {
 		this.cdr.detectChanges();
 		audio.pause();
 		audio.currentTime = 0;
-		// this.cdr.detectChanges();
 	}
 
 	playTone(color: number): HTMLAudioElement {

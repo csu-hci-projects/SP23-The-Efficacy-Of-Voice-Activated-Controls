@@ -10,6 +10,12 @@ export class VoiceControlService {
 	private baseUrl = 'http://localhost:5000';
 	recognition: SpeechRecognition | null = null;
 	silenceTimeout: any = null;
+	startTime: number | null = null;
+	userTimes: number[] | null = [];
+	clickRoundTimes: Array<number[] | null> = new Array<number[] | null>();
+	clickRoundsSurvived: number[] = [];
+	voiceRoundTimes: Array<number[] | null> = new Array<number[] | null>();
+	voiceRoundsSurvived: number[] = [];
 
 	constructor(private http: HttpClient) {
 		this.initializeRecognition();
@@ -56,7 +62,7 @@ export class VoiceControlService {
 				this.silenceTimeout = setTimeout(() => {
 					this.stop();
 					observer.complete();
-				}, 2000);
+				}, 1000);
 			};
 
 			this.recognition.onerror = (error: ErrorEvent) => {
@@ -74,5 +80,69 @@ export class VoiceControlService {
 		if (this.recognition) {
 			this.recognition.stop();
 		}
+	}
+
+	startTimer() {
+		this.startTime = new Date().getTime();
+	}
+
+	stopTimer(type: string) {
+		if (this.startTime && this.userTimes) {
+			const endTime = new Date().getTime();
+			let timeElapsed = null;
+			if (type === 'voice') {
+				timeElapsed = (endTime - this.startTime - 1000) / 1000;
+			} else {
+				timeElapsed = (endTime - this.startTime) / 1000;
+			}
+			this.userTimes.push(timeElapsed);
+			this.startTime = null;
+		}
+	}
+
+	removeLastTime() {
+		if (this.userTimes) {
+			this.userTimes.pop();
+		}
+	}
+
+	pushRoundTimes(type: boolean, rounds: number) {
+		if (type === false) {
+			console.log('pushing click times');
+			this.clickRoundTimes.push(this.userTimes);
+			this.clickRoundsSurvived.push(rounds);
+			this.userTimes = [];
+		} else {
+			console.log('pushing voice times');
+			this.voiceRoundTimes.push(this.userTimes);
+			this.voiceRoundsSurvived.push(rounds);
+			this.userTimes = [];
+		}
+	}
+
+	postClickTimes() {
+		console.log('posting click times');
+		this.userTimes = [];
+		this.startTime = null;
+	}
+
+	printClickTimes() {
+		console.log('Printing click times:');
+		this.clickRoundTimes.forEach((round, index) => {
+			console.log(`Round ${index + 1}: ${round}`);
+		});
+		this.clickRoundsSurvived.forEach((round, index) => {
+			console.log(`Max Round ${index + 1}: ${round}`);
+		});
+	}
+
+	printVoiceTimes() {
+		console.log('printing voice times:');
+		this.voiceRoundTimes.forEach((round, index) => {
+			console.log(`Round ${index + 1}: ${round}`);
+		});
+		this.voiceRoundsSurvived.forEach((round, index) => {
+			console.log(`Max Round ${index + 1}: ${round}`);
+		});
 	}
 }

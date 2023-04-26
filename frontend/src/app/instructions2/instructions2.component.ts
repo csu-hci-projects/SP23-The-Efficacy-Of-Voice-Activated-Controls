@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { VoiceControlService } from './../voice-control.service';
 
 @Component({
 	selector: 'app-instructions2',
@@ -6,7 +7,9 @@ import { Component } from '@angular/core';
 	styleUrls: ['./instructions2.component.css'],
 })
 export class Instructions2Component {
+	constructor(public VoiceControlService: VoiceControlService) {}
+
 	continue() {
-		console.log('Continuing to first test...');
+		console.log('Continuing to second test...');
 	}
 }

@@ -1,13 +1,35 @@
-<div class="container">
-	<h1>Second Test: Voice Input</h1>
-	<app-simon [currentCommand]="command" (sendGameOver)="allowUserToContinue($event)"></app-simon>
-	<button mat-raised-button (click)="startListening()" *ngIf="!isRecording && !continue" class="button">
-		Record Command
-	</button>
-	<button mat-raised-button (click)="startListening()" *ngIf="isRecording && !continue" disabled="true" class="button">
-		Speak now
-	</button>
-	<button mat-raised-button (click)="startListening()" *ngIf="continue" class="button" routerLink="/endgame">
-		Next
-	</button>
+<div class="container" *ngIf="!warmUpComplete">
+	<mat-card class="card">
+		<mat-card-title> Time to test your microphone! </mat-card-title>
+		<mat-card-content>
+			<p class="card-text">Please press the button and say "test" to warm up the voice recognition.</p>
+			<button mat-raised-button (click)="startWarmUp()" class="btn btn-primary">Start Warm-up</button>
+		</mat-card-content>
+	</mat-card>
+</div>
+
+<div *ngIf="warmUpComplete">
+	<div class="container">
+		<h1>Second Test: Voice Input</h1>
+		<app-simon
+			[currentCommand]="command"
+			[clickDisabled]="true"
+			(sendGameOver)="allowUserToContinue($event)"
+		></app-simon>
+		<button mat-raised-button (click)="startListening()" *ngIf="!isRecording && !continue" class="button">
+			Record Command
+		</button>
+		<button
+			mat-raised-button
+			(click)="startListening()"
+			*ngIf="isRecording && !continue"
+			disabled="true"
+			class="button"
+		>
+			Speak now
+		</button>
+		<button mat-raised-button (click)="printVoiceScores()" *ngIf="continue" class="button" routerLink="/endgame">
+			Next
+		</button>
+	</div>
 </div>
