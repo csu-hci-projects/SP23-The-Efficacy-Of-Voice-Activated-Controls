@@ -53,7 +53,7 @@ run "ng serve" on cli/gitbash
 - game implementation 1 mouse - frontend - Justin DONE ✓
 - voice command implementation - frontend - Justin DONE ✓
 - game implementation 2 VC - frontend - Justin DONE ✓
-- session metrics - frontend
+- session metrics - frontend - Justin DONE ✓
 - session metrics - middleware
 - session metrics - backend
 - feedback form - fromtend
