@@ -1,6 +1,6 @@
 import { Injectable, Input } from '@angular/core';
 import { SpeechRecognition, SpeechRecognitionEvent } from 'global';
-import { Observable, catchError, of, throwError } from 'rxjs';
+import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -16,6 +16,7 @@ export class VoiceControlService {
 	clickRoundsSurvived: number[] = [];
 	voiceRoundTimes: Array<number[] | null> = new Array<number[] | null>();
 	voiceRoundsSurvived: number[] = [];
+	userID: number | null = null;
 
 	constructor(private http: HttpClient) {
 		this.initializeRecognition();
@@ -31,6 +32,41 @@ export class VoiceControlService {
 				return of(error);
 			})
 		);
+	}
+
+	submitTestData() {
+		console.log('submitting test data');
+		const numberOfLives = 3;
+		const requests = [];
+
+		for (let life = 0; life < numberOfLives; life++) {
+			const testData = {
+				user_id: this.userID, // Replace this with a variable when you have it.
+				click_test_life_number: life,
+				click_test_rounds_survived: this.clickRoundsSurvived[life],
+				click_test_move_times: this.clickRoundTimes[life] || [],
+				voice_test_life_number: life,
+				voice_test_rounds_survived: this.voiceRoundsSurvived[life],
+				voice_test_move_times: this.voiceRoundTimes[life] || [],
+			};
+
+			requests.push(
+				this.http.post(`${this.baseUrl}/submit_test_data`, testData).pipe(
+					catchError((error) => {
+						alert('Error submitting test data. Please contact your test administrator. Detail: ' + error.error.detail);
+						console.error(error);
+						return of(error);
+					})
+				)
+			);
+		}
+
+		return forkJoin(requests);
+	}
+
+	setUserID(id: number) {
+		console.log('setting user id: ' + id);
+		this.userID = id;
 	}
 
 	initializeRecognition(): void {

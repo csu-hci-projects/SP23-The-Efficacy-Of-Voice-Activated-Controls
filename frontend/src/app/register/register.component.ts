@@ -25,7 +25,8 @@ export class RegisterComponent {
 			let response = this.VoiceControlService.sendRegistrationInfo(this.registerForm.value);
 			response.subscribe((res) => {
 				if (!res.error) {
-					console.log('completed.');
+					console.log('completed: ' + JSON.stringify(res));
+					this.VoiceControlService.setUserID(res.id);
 					this.router.navigate(['/instructions']);
 				}
 			});

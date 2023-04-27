@@ -8,28 +8,16 @@
 	</mat-card>
 </div>
 
-<div *ngIf="warmUpComplete">
-	<div class="container">
-		<h1>Second Test: Voice Input</h1>
-		<app-simon
-			[currentCommand]="command"
-			[clickDisabled]="true"
-			(sendGameOver)="allowUserToContinue($event)"
-		></app-simon>
-		<button mat-raised-button (click)="startListening()" *ngIf="!isRecording && !continue" class="button">
-			Record Command
-		</button>
-		<button
-			mat-raised-button
-			(click)="startListening()"
-			*ngIf="isRecording && !continue"
-			disabled="true"
-			class="button"
-		>
-			Speak now
-		</button>
-		<button mat-raised-button (click)="printVoiceScores()" *ngIf="continue" class="button" routerLink="/endgame">
-			Next
-		</button>
-	</div>
+<div class="container" *ngIf="warmUpComplete">
+	<h1>Second Test: Voice Input</h1>
+	<app-simon [currentCommand]="command" [clickDisabled]="true" (sendGameOver)="allowUserToContinue($event)"></app-simon>
+	<button mat-raised-button (click)="startListening()" *ngIf="!isRecording && !continue" class="button">
+		Record Command
+	</button>
+	<button mat-raised-button (click)="startListening()" *ngIf="isRecording && !continue" disabled="true" class="button">
+		Speak now
+	</button>
+	<button mat-raised-button (click)="printVoiceScores()" *ngIf="continue" class="button" routerLink="/endgame">
+		Next
+	</button>
 </div>

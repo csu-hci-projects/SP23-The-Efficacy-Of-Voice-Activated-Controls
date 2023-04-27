@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import FastAPI, HTTPException, Body, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
@@ -6,6 +7,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import create_engine
 import pandas as pd
 from typing import Dict, List, Optional, Union
+import json
 
 
 server = FastAPI(
@@ -74,6 +76,51 @@ async def add_user(
         first_name, last_name)).iloc[0]["id"]
 
     return {"id": int(user_id), "first_name": first_name, "last_name": last_name}
+
+
+@server.post("/submit_test_data", description="Submit test data for a user", summary='Submit user test data', tags=['test_data'])
+async def submit_test_data(
+    user_id: int = Body(..., description="The user's ID"),
+    click_test_life_number: int = Body(...,
+                                       description="The life number for click test"),
+    click_test_rounds_survived: int = Body(...,
+                                           description="Rounds survived in click test"),
+    click_test_move_times: List[float] = Body(
+        ..., description="List of move times in each round for click test"),
+    voice_test_life_number: int = Body(...,
+                                       description="The life number for voice test"),
+    voice_test_rounds_survived: int = Body(...,
+                                           description="Rounds survived in voice test"),
+    voice_test_move_times: List[float] = Body(
+        ..., description="List of move times in each round for voice test"),
+):
+    # Convert move_times to JSON strings
+    click_test_move_times_json = json.dumps(click_test_move_times)
+    voice_test_move_times_json = json.dumps(voice_test_move_times)
+
+    # Insert click test data into the click_tests table
+    click_test_data = {
+        "user_id": user_id,
+        "life_number": click_test_life_number,
+        "rounds_survived": click_test_rounds_survived,
+        "move_times": click_test_move_times_json,
+    }
+    click_test_df = pd.DataFrame([click_test_data])
+    click_test_df.to_sql("click_tests", engine,
+                         if_exists="append", index=False, method="multi")
+
+    # Insert voice test data into the voice_tests table
+    voice_test_data = {
+        "user_id": user_id,
+        "life_number": voice_test_life_number,
+        "rounds_survived": voice_test_rounds_survived,
+        "move_times": voice_test_move_times_json,
+    }
+    voice_test_df = pd.DataFrame([voice_test_data])
+    voice_test_df.to_sql("voice_tests", engine,
+                         if_exists="append", index=False, method="multi")
+
+    return {"message": "Test data submitted successfully"}
 
 
 if __name__ == "__main__":
