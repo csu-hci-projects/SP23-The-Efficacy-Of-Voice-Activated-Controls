@@ -54,8 +54,8 @@ run "ng serve" on cli/gitbash
 - voice command implementation - frontend - Justin DONE ✓
 - game implementation 2 VC - frontend - Justin DONE ✓
 - session metrics - frontend - Justin DONE ✓
-- session metrics - middleware
-- session metrics - backend
+- session metrics - middleware - Justin DONE ✓
+- session metrics - backend - Justin DONE ✓
 - feedback form - fromtend
 - feedback form - middleware
 - feedback form - backend
