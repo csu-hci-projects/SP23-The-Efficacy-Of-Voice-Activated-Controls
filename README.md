@@ -59,5 +59,5 @@ run "ng serve" on cli/gitbash
 - feedback form - fromtend
 - feedback form - middleware
 - feedback form - backend
-- Data analytics - middleware
-- data analytics - backend
+- Data analytics - middleware - Justin DONE ✓
+- data analytics - backend - Justin DONE ✓
