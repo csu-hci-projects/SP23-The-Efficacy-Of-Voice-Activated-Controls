@@ -81,9 +81,16 @@ def fetch_data_from_database():
 
 
 def perform_anova(df_long):
-    anova_model = ols('Score ~ Test * user_id', data=df_long).fit()
-    anova_result = sm.stats.anova_lm(anova_model, typ=2)
-    return anova_result
+    anova_model_no_interaction = ols(
+        'Score ~ Test + user_id', data=df_long).fit()
+    anova_result_no_interaction = sm.stats.anova_lm(
+        anova_model_no_interaction, typ=2)
+
+    anova_model_interaction = ols('Score ~ Test * user_id', data=df_long).fit()
+    anova_result_interaction = sm.stats.anova_lm(
+        anova_model_interaction, typ=2)
+
+    return anova_result_no_interaction, anova_result_interaction
 
 
 def create_visualizations(df_long):
@@ -129,11 +136,12 @@ def create_visualizations(df_long):
 async def anova():
     try:
         df_long = fetch_data_from_database()
-        anova_result = perform_anova(df_long)
+        anova_result_no_interaction, anova_result_interaction = perform_anova(
+            df_long)
         fig_box_html, fig_bar_html, fig_violin_html, fig_scatter_html, fig_line_html = create_visualizations(
             df_long)
 
-        response = f"<h2>ANOVA Results:</h2><pre>{anova_result.to_string()}</pre><h2>Visualizations:</h2><h3>Box Plot:</h3>{fig_box_html}<h3>Bar Plot:</h3>{fig_bar_html}<h3>Violin Plot:</h3>{fig_violin_html}<h3>Scatter Plot:</h3>{fig_scatter_html}<h3>Line Plot:</h3>{fig_line_html}"
+        response = f"<h2>ANOVA Results (No Interaction):</h2><pre>{anova_result_no_interaction.to_string()}</pre><h2>ANOVA Results (Interaction):</h2><pre>{anova_result_interaction.to_string()}</pre><h2>Visualizations:</h2><h3>Box Plot:</h3>{fig_box_html}<h3>Bar Plot:</h3>{fig_bar_html}<h3>Violin Plot:</h3>{fig_violin_html}<h3>Scatter Plot:</h3>{fig_scatter_html}<h3>Line Plot:</h3>{fig_line_html}"
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

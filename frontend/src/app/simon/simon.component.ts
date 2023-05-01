@@ -22,7 +22,7 @@ export class SimonComponent implements OnChanges {
 	counter: number = 0;
 	userMessage: string = '';
 	gameState: 'idle' | 'playingSequence' | 'awaitingInput' = 'idle';
-	livesRemaining: number = 3;
+	livesRemaining: number = 2;
 	gameInProgress: boolean = false;
 	gameOver: boolean = false;
 	@Input() currentCommand: string[] = [];
@@ -76,7 +76,7 @@ export class SimonComponent implements OnChanges {
 
 	async startGame() {
 		this.gameInProgress = true;
-		this.livesRemaining = 3;
+		this.livesRemaining = 2;
 		this.sequence = [];
 		this.counter = 0;
 		this.userMessage = '';
