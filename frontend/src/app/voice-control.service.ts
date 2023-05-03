@@ -36,12 +36,12 @@ export class VoiceControlService {
 
 	submitTestData() {
 		console.log('submitting test data');
-		const numberOfLives = 3;
+		const numberOfLives = 2;
 		const requests = [];
 
 		for (let life = 0; life < numberOfLives; life++) {
 			const testData = {
-				user_id: this.userID, // Replace this with a variable when you have it.
+				user_id: this.userID,
 				click_test_life_number: life,
 				click_test_rounds_survived: this.clickRoundsSurvived[life],
 				click_test_move_times: this.clickRoundTimes[life] || [],
@@ -53,7 +53,7 @@ export class VoiceControlService {
 			requests.push(
 				this.http.post(`${this.baseUrl}/submit_test_data`, testData).pipe(
 					catchError((error) => {
-						alert('Error submitting test data. Please contact your test administrator. Detail: ' + error.error.detail);
+						alert('Error submitting test data. Please contact your test administrator.');
 						console.error(error);
 						return of(error);
 					})

@@ -30,6 +30,8 @@ export class SimonComponent implements OnChanges {
 	@Output() sendGameOver = new EventEmitter<boolean>();
 	@Input() timerActive: boolean = false;
 	@Output() timerActiveChange = new EventEmitter<boolean>();
+	voiceCommandInProgress!: boolean;
+	incorrectClick: boolean = false;
 
 	constructor(private cdr: ChangeDetectorRef, public VoiceControlService: VoiceControlService) {}
 
@@ -45,20 +47,26 @@ export class SimonComponent implements OnChanges {
 	}
 
 	async processVoiceCommand(commands: string[]) {
+		this.voiceCommandInProgress = true;
+		let continueProcessingCommands = true;
+
 		for (const command of commands) {
+			if (!continueProcessingCommands) {
+				break;
+			}
 			console.log('processing command: ' + command);
 			switch (command) {
 				case '1':
-					await this.clickSquare(0);
+					continueProcessingCommands = await this.clickSquare(0);
 					break;
 				case '2':
-					await this.clickSquare(1);
+					continueProcessingCommands = await this.clickSquare(1);
 					break;
 				case '3':
-					await this.clickSquare(2);
+					continueProcessingCommands = await this.clickSquare(2);
 					break;
 				case '4':
-					await this.clickSquare(3);
+					continueProcessingCommands = await this.clickSquare(3);
 					break;
 				default:
 					alert(
@@ -69,8 +77,11 @@ export class SimonComponent implements OnChanges {
 					this.VoiceControlService.removeLastTime();
 					break;
 			}
-			await this.delay(500);
+			await this.delay(500); // Add a small delay between processing commands
 		}
+
+		this.voiceCommandInProgress = false;
+		this.currentCommand = []; // Clear the current command after processing all commands
 		this.cdr.detectChanges();
 	}
 
@@ -99,19 +110,47 @@ export class SimonComponent implements OnChanges {
 		this.gameState = 'awaitingInput';
 	}
 
-	async clickSquare(color: number) {
-		if (this.gameState !== 'awaitingInput') return;
+	async clickSquare(color: number): Promise<boolean> {
+		if (this.gameState !== 'awaitingInput') return false;
+
+		// Check if the player has already provided enough inputs for the current round
+		if (this.playerSequence.length >= this.sequence.length && !this.voiceCommandInProgress) {
+			console.log('Ignoring extra input');
+			return false;
+		}
+
 		this.playerSequence.push(color);
 		this.lightUpSquare(color, 250);
 
 		if (this.sequence[this.playerSequence.length - 1] !== color) {
-			await this.delay(1000);
-			await this.incorrectInput();
+			await this.handleIncorrectInput();
+			return false;
 		} else if (this.playerSequence.length === this.sequence.length) {
 			this.userMessage = `Round ${this.counter} complete!`;
 			if (this.clickDisabled === false) {
 				this.stopClickTimer();
 			}
+			await this.delay(2000);
+			await this.nextRound();
+			return false;
+		}
+		return true;
+	}
+
+	async handleIncorrectInput() {
+		this.stopClickTimer();
+		this.livesRemaining--;
+		if (this.livesRemaining <= 0) {
+			this.VoiceControlService.pushRoundTimes(this.clickDisabled, this.counter);
+			this.userMessage = 'Game Over!';
+			this.gameInProgress = false;
+			this.gameOver = true;
+			this.sendGameOver.emit(true);
+		} else {
+			this.userMessage = `Incorrect input. Lives remaining: ${this.livesRemaining}`;
+			this.VoiceControlService.pushRoundTimes(this.clickDisabled, this.counter);
+			this.sequence = [];
+			this.counter = 0;
 			await this.delay(2000);
 			await this.nextRound();
 		}
@@ -124,11 +163,9 @@ export class SimonComponent implements OnChanges {
 	}
 
 	async incorrectInput() {
+		this.stopClickTimer();
 		this.livesRemaining--;
 		if (this.livesRemaining <= 0) {
-			if (this.clickDisabled == false) {
-				this.stopClickTimer();
-			}
 			this.VoiceControlService.pushRoundTimes(this.clickDisabled, this.counter);
 			this.userMessage = 'Game Over!';
 			this.gameInProgress = false;
@@ -136,9 +173,6 @@ export class SimonComponent implements OnChanges {
 			this.sendGameOver.emit(true);
 		} else {
 			this.userMessage = `Incorrect input. Lives remaining: ${this.livesRemaining}`;
-			if (this.clickDisabled == false) {
-				this.stopClickTimer();
-			}
 			this.VoiceControlService.pushRoundTimes(this.clickDisabled, this.counter);
 			this.sequence = [];
 			this.counter = 0;

@@ -2,7 +2,12 @@
 	<mat-card class="card">
 		<mat-card-title> Time to test your microphone! </mat-card-title>
 		<mat-card-content>
+			<p class="card-text">
+				Before we begin the game, we are going to warm up your microphone. Please note that the microphone is recording
+				if a red dot is present on the tab of your current browser window.
+			</p>
 			<p class="card-text">Please press the button and say "test" to warm up the voice recognition.</p>
+
 			<button mat-raised-button (click)="startWarmUp()" class="btn btn-primary">Start Warm-up</button>
 		</mat-card-content>
 	</mat-card>
@@ -14,7 +19,13 @@
 	<button mat-raised-button (click)="startListening()" *ngIf="!isRecording && !continue" class="button">
 		Record Command
 	</button>
-	<button mat-raised-button (click)="startListening()" *ngIf="isRecording && !continue" disabled="true" class="button">
+	<button
+		mat-raised-button
+		(click)="startListening()"
+		*ngIf="isRecording && !continue"
+		[disabled]="true"
+		class="button"
+	>
 		Speak now
 	</button>
 	<button mat-raised-button (click)="printVoiceScores()" *ngIf="continue" class="button" routerLink="/endgame">

@@ -13,6 +13,7 @@ export class Test2Component implements OnInit, OnDestroy {
 	isRecording: boolean = false;
 	continue: boolean = false;
 	warmUpComplete: boolean = false;
+	isListening: boolean = false;
 
 	constructor(private voiceControlService: VoiceControlService, private cdr: ChangeDetectorRef) {}
 
@@ -49,6 +50,10 @@ export class Test2Component implements OnInit, OnDestroy {
 	}
 
 	startListening(): void {
+		if (this.isListening) {
+			return;
+		}
+		this.isListening = true;
 		this.isRecording = true;
 		this.voiceControlService.startTimer();
 		this.cdr.detectChanges();
@@ -70,10 +75,12 @@ export class Test2Component implements OnInit, OnDestroy {
 			error: (error: any) => {
 				console.log(error);
 				this.isRecording = false;
+				this.isListening = false;
 				this.cdr.detectChanges();
 			},
 			complete: () => {
 				this.isRecording = false;
+				this.isListening = false;
 				this.subscription?.unsubscribe();
 				this.voiceControlService.stop();
 				this.voiceControlService.stopTimer('voice');
@@ -87,6 +94,7 @@ export class Test2Component implements OnInit, OnDestroy {
 			this.subscription.unsubscribe();
 		}
 		this.isRecording = false;
+		this.isListening = false;
 		this.voiceControlService.stop();
 		this.voiceControlService.stopTimer('voice');
 	}
