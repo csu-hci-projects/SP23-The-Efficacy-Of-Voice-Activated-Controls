@@ -30,7 +30,7 @@ Node
 
 Docker
 
-Web Browser
+Google Chrome
 
 # Instructions
 
@@ -49,8 +49,7 @@ use docker desktop to view containers or navigate browser to:
   $ docker container ls
   $ docker exec -it <your-postgres-container-id> bash
   $ psql -d postgres -U postgres
-
-**_working with DB to retain volume_**
+  (A tunnel to port 5432 can also be created and a DB editor like DBeaver can be connected)
 
 # To run frontend locally on dev
 
