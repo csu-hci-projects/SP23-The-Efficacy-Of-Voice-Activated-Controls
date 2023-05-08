@@ -9,6 +9,8 @@ https://www.youtube.com/watch?v=ztbbjB8YIGQ
 
 ## Live Example:
 
+**It must be used on a computer in Google Chrome. It is not Optimized for mobile or tablet**
+
 Application:
 https://www.csu-hci-experiment.online/
 
