@@ -27,8 +27,8 @@ server = FastAPI(
 
 server.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://www.csu-hci-experiment.online"],
-    # allow_origins=["*"],
+    # allow_origins=["https://www.csu-hci-experiment.online"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
