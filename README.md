@@ -4,6 +4,17 @@ Authors: Justin Going, Camden McGinis, Kimeron Lazare, Andrew Jelkin
 
 The purpose of this repo is to create a MVC for cs464 capstone on the efficacy of voice control in a game
 
+## Live Example:
+
+Application:
+www.csu-hci-experiment.online
+
+Analysis:
+www.csu-hci-experiment.online:5000/anova
+
+API:
+www.csu-hci-experiment.online:5000/docs
+
 # Pre-requisites
 
 Git
@@ -56,8 +67,8 @@ run "ng serve" on cli/gitbash
 - session metrics - frontend - Justin DONE ✓
 - session metrics - middleware - Justin DONE ✓
 - session metrics - backend - Justin DONE ✓
-- feedback form - fromtend
-- feedback form - middleware
-- feedback form - backend
+- feedback form - fromtend - not done X
+- feedback form - middleware - not done X
+- feedback form - backend - not done X
 - Data analytics - middleware - Justin DONE ✓
 - data analytics - backend - Justin DONE ✓
