@@ -4,6 +4,9 @@ Authors: Justin Going, Camden McGinis, Kimeron Lazare, Andrew Jelkin
 
 The purpose of this repo is to create a MVC for cs464 capstone on the efficacy of voice control in a game
 
+Code overview and experiment:
+https://www.youtube.com/watch?v=ztbbjB8YIGQ
+
 ## Live Example:
 
 Application:
