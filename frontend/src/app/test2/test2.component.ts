@@ -19,6 +19,7 @@ export class Test2Component implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.voiceControlService.initializeRecognition();
+		this.voiceControlService.resetTimes(true);
 	}
 
 	ngOnDestroy(): void {

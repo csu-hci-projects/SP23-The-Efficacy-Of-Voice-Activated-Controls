@@ -12,14 +12,10 @@ export class EndgameComponent implements OnInit {
 		this.VoiceControlService.postClickTimes();
 		this.VoiceControlService.submitTestData().subscribe(
 			(responses) => {
-				// All requests have completed successfully
 				console.log('All test data submitted successfully');
 				console.log('Responses:', responses);
-
-				// You can now navigate to a success page or show a success message to the user
 			},
 			(error) => {
-				// At least one request has failed
 				console.error('Error submitting test data:', error);
 			}
 		);

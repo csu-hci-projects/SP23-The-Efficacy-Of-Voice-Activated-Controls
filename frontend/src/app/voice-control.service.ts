@@ -1,13 +1,16 @@
 import { Injectable, Input } from '@angular/core';
 import { SpeechRecognition, SpeechRecognitionEvent } from 'global';
 import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class VoiceControlService {
+	// private baseUrl = 'https://35.208.172.104:5000';
+	// private baseUrl = 'https://www.csu-hci-experiment.online:5000';
 	private baseUrl = 'http://localhost:5000';
+
 	recognition: SpeechRecognition | null = null;
 	silenceTimeout: any = null;
 	startTime: number | null = null;
@@ -153,6 +156,20 @@ export class VoiceControlService {
 			this.voiceRoundTimes.push(this.userTimes);
 			this.voiceRoundsSurvived.push(rounds);
 			this.userTimes = [];
+		}
+	}
+
+	resetTimes(type: boolean) {
+		this.startTime = null;
+		this.userTimes = [];
+		if (type === false) {
+			console.log('resetting click times');
+			this.clickRoundTimes = [];
+			this.clickRoundsSurvived = [];
+		} else {
+			console.log('resetting voice times');
+			this.voiceRoundTimes = [];
+			this.voiceRoundsSurvived = [];
 		}
 	}
 

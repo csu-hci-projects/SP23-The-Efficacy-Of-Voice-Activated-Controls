@@ -27,9 +27,11 @@ services:
     volumes:
       - './frontend:/frontend'
       - '/frontend/node_modules'
+      # - './ssl:/etc/nginx/ssl'
     ports:
       # prod port binding
-      # - "8080:80"
+      # - '80:80'
+      # - '443:443'
       # dev port binding
       - '4200:4200'
   voice_control_api:
@@ -41,6 +43,7 @@ services:
     user: root
     volumes:
       - ./api:/api
+      # - ./ssl:/ssl
     entrypoint: watchmedo auto-restart --recursive --pattern="*.py" --directory="." python voice_control_api.py
     ports:
       - '5000:5000'

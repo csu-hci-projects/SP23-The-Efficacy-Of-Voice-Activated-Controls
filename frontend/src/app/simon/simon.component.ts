@@ -77,11 +77,11 @@ export class SimonComponent implements OnChanges {
 					this.VoiceControlService.removeLastTime();
 					break;
 			}
-			await this.delay(500); // Add a small delay between processing commands
+			await this.delay(500);
 		}
 
 		this.voiceCommandInProgress = false;
-		this.currentCommand = []; // Clear the current command after processing all commands
+		this.currentCommand = [];
 		this.cdr.detectChanges();
 	}
 
@@ -113,7 +113,6 @@ export class SimonComponent implements OnChanges {
 	async clickSquare(color: number): Promise<boolean> {
 		if (this.gameState !== 'awaitingInput') return false;
 
-		// Check if the player has already provided enough inputs for the current round
 		if (this.playerSequence.length >= this.sequence.length && !this.voiceCommandInProgress) {
 			console.log('Ignoring extra input');
 			return false;

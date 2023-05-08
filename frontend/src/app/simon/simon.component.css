@@ -88,7 +88,6 @@ button:hover {
 	min-height: 24px;
 }
 
-/* Update the styles to position the number in the middle of the square and set the color to black */
 .square .number {
 	position: absolute;
 	top: 50%;
@@ -99,7 +98,6 @@ button:hover {
 	color: black;
 }
 
-/* Add position:relative to the .square class */
 .square {
 	position: relative;
 	width: 100px;

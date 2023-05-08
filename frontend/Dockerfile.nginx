@@ -1,0 +1,14 @@
+# get image
+FROM nginx:latest
+
+# copy custom nginx.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+# copy from build env
+COPY ./dist /usr/share/nginx/html
+
+# expose port
+EXPOSE 80 443
+
+# run it
+CMD ["nginx", "-g", "daemon off;"]

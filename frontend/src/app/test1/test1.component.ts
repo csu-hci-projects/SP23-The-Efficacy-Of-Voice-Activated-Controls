@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { VoiceControlService } from './../voice-control.service';
 
 @Component({
@@ -6,11 +6,15 @@ import { VoiceControlService } from './../voice-control.service';
 	templateUrl: './test1.component.html',
 	styleUrls: ['./test1.component.css'],
 })
-export class Test1Component {
+export class Test1Component implements OnInit {
 	continue: boolean = false;
 	timerActive: boolean = false;
 
 	constructor(public VoiceControlService: VoiceControlService) {}
+
+	ngOnInit() {
+		this.VoiceControlService.resetTimes(false);
+	}
 
 	allowUserToContinue(event: any) {
 		console.log('game over in parent: ' + JSON.stringify(event));

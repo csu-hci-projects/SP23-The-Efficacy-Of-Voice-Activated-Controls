@@ -4,7 +4,7 @@ import numpy as np
 from fastapi import FastAPI, HTTPException, Body, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-
+import os
 import uvicorn
 import logging
 from pydantic import BaseModel, Field
@@ -12,6 +12,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 from typing import Dict, List, Optional, Union
 import json
+import ssl
 import plotly.express as px
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
@@ -26,13 +27,13 @@ server = FastAPI(
 
 server.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://www.csu-hci-experiment.online"],
+    # allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Replace the following values with your actual database credentials
 DB_USER = "postgres"
 DB_PASSWORD = "123"
 DB_HOST = "voice_control_db"
@@ -77,10 +78,19 @@ def fetch_data_from_database():
 
     result = df_long[['user_id', 'life_number', 'Test', 'Score']]
 
-    return result
+    # Create df_long_rounds for rounds_survived analysis
+    df_long_rounds = df[['user_id', 'click_life', 'voice_life', 'click_rounds', 'voice_rounds']].melt(
+        id_vars=["user_id", "click_life", "voice_life"], value_vars=["click_rounds", "voice_rounds"], var_name="Test", value_name="rounds_survived")
+    df_long_rounds["Test"] = df_long_rounds["Test"].map(
+        {"click_rounds": "Click", "voice_rounds": "Voice"})
+    df_long_rounds = df_long_rounds.dropna(subset=['rounds_survived'])
+    df_long_rounds['life_number'] = df_long_rounds.apply(
+        lambda row: row['click_life'] if row['Test'] == 'Click' else row['voice_life'], axis=1)
+
+    return result, df_long_rounds
 
 
-def perform_anova(df_long):
+def perform_anova(df_long, df_long_rounds):
     anova_model_no_interaction = ols(
         'Score ~ Test + user_id', data=df_long).fit()
     anova_result_no_interaction = sm.stats.anova_lm(
@@ -90,10 +100,20 @@ def perform_anova(df_long):
     anova_result_interaction = sm.stats.anova_lm(
         anova_model_interaction, typ=2)
 
-    return anova_result_no_interaction, anova_result_interaction
+    anova_rounds_model_no_interaction = ols(
+        'rounds_survived ~ Test + user_id', data=df_long_rounds).fit()
+    anova_rounds_result_no_interaction = sm.stats.anova_lm(
+        anova_rounds_model_no_interaction, typ=2)
+
+    anova_rounds_model_interaction = ols(
+        'rounds_survived ~ Test * user_id', data=df_long_rounds).fit()
+    anova_rounds_result_interaction = sm.stats.anova_lm(
+        anova_rounds_model_interaction, typ=2)
+
+    return anova_result_no_interaction, anova_result_interaction, anova_rounds_result_no_interaction, anova_rounds_result_interaction
 
 
-def create_visualizations(df_long):
+def create_visualizations(df_long, df_long_rounds):
     plot_height = 400
     plot_width = 600
 
@@ -129,19 +149,51 @@ def create_visualizations(df_long):
     fig_line.update_layout(height=plot_height, width=plot_width * 2)
     fig_line_html = fig_line.to_html(full_html=False)
 
-    return fig_box_html, fig_bar_html, fig_violin_html, fig_scatter_html, fig_line_html
+    # Add these lines to create a box plot for rounds_survived
+    fig_rounds_box = px.box(df_long_rounds, x='Test', y='rounds_survived',
+                            title='Box Plot: Rounds Survived by Test', points='all')
+    fig_rounds_box.update_layout(height=plot_height, width=plot_width)
+    fig_rounds_box_html = fig_rounds_box.to_html(full_html=False)
+
+    # Add these lines to create a bar plot for average rounds_survived by each user
+    df_rounds_grouped = df_long_rounds.groupby(
+        ['user_id', 'Test']).mean().reset_index()
+    fig_rounds_bar = px.bar(df_rounds_grouped, x='user_id', y='rounds_survived',
+                            title='Bar Plot: Average Rounds Survived by User and Test', color='Test', barmode='group')
+    fig_rounds_bar.update_xaxes(tickmode='linear', dtick=1)
+    fig_rounds_bar.update_layout(height=plot_height, width=plot_width)
+    fig_rounds_bar_html = fig_rounds_bar.to_html(full_html=False)
+
+    # Add these lines to create a box plot for rounds_survived
+    fig_rounds_box = px.box(df_long_rounds, x='Test', y='rounds_survived',
+                            title='Box Plot: Rounds Survived by Test', points='all')
+    fig_rounds_box.update_layout(height=plot_height, width=plot_width)
+    fig_rounds_box_html = fig_rounds_box.to_html(full_html=False)
+
+    # Add these lines to create a bar plot for average rounds_survived by each user
+    df_rounds_grouped = df_long_rounds.groupby(
+        ['user_id', 'Test']).mean().reset_index()
+    fig_rounds_bar = px.bar(df_rounds_grouped, x='user_id', y='rounds_survived',
+                            title='Bar Plot: Average Rounds Survived by User and Test', color='Test', barmode='group')
+    fig_rounds_bar.update_xaxes(tickmode='linear', dtick=1)
+    fig_rounds_bar.update_layout(height=plot_height, width=plot_width)
+    fig_rounds_bar_html = fig_rounds_bar.to_html(full_html=False)
+
+    # Add the new fig_rounds_box_html and fig_rounds_bar_html to the return statement
+    return fig_box_html, fig_bar_html, fig_violin_html, fig_scatter_html, fig_line_html, fig_rounds_box_html, fig_rounds_bar_html
 
 
 @server.get("/anova", response_class=HTMLResponse)
 async def anova():
     try:
-        df_long = fetch_data_from_database()
-        anova_result_no_interaction, anova_result_interaction = perform_anova(
-            df_long)
-        fig_box_html, fig_bar_html, fig_violin_html, fig_scatter_html, fig_line_html = create_visualizations(
-            df_long)
+        df_long, df_long_rounds = fetch_data_from_database()
+        # Unpack all 4 returned values from perform_anova()
+        anova_result_no_interaction, anova_result_interaction, anova_rounds_result_no_interaction, anova_rounds_result_interaction = perform_anova(
+            df_long, df_long_rounds)
+        fig_box_html, fig_bar_html, fig_violin_html, fig_scatter_html, fig_line_html, fig_rounds_box_html, fig_rounds_bar_html = create_visualizations(
+            df_long, df_long_rounds)
 
-        response = f"<h2>ANOVA Results (No Interaction):</h2><pre>{anova_result_no_interaction.to_string()}</pre><h2>ANOVA Results (Interaction):</h2><pre>{anova_result_interaction.to_string()}</pre><h2>Visualizations:</h2><h3>Box Plot:</h3>{fig_box_html}<h3>Bar Plot:</h3>{fig_bar_html}<h3>Violin Plot:</h3>{fig_violin_html}<h3>Scatter Plot:</h3>{fig_scatter_html}<h3>Line Plot:</h3>{fig_line_html}"
+        response = f"<h2>ANOVA Results (No Interaction):</h2><pre>{anova_result_no_interaction.to_string()}</pre><h2>ANOVA Results (Interaction):</h2><pre>{anova_result_interaction.to_string()}</pre><h2>ANOVA Results for Rounds Survived (No Interaction):</h2><pre>{anova_rounds_result_no_interaction.to_string()}</pre><h2>ANOVA Results for Rounds Survived (Interaction):</h2><pre>{anova_rounds_result_interaction.to_string()}</pre><h2>Visualizations:</h2><h3>Box Plot:</h3>{fig_box_html}<h3>Bar Plot:</h3>{fig_bar_html}<h3>Violin Plot:</h3>{fig_violin_html}<h3>Scatter Plot:</h3>{fig_scatter_html}<h3>Line Plot:</h3>{fig_line_html}<h3>Rounds Survived Box Plot:</h3>{fig_rounds_box_html}<h3>Average Rounds Survived Bar Plot:</h3>{fig_rounds_bar_html}"
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -232,5 +284,13 @@ async def submit_test_data(
 
 
 if __name__ == "__main__":
+
     uvicorn.run("voice_control_api:server", host="0.0.0.0",
                 port=5000, log_level="info", reload=True)
+
+    # SSL for live deployment
+    # cert_path = os.path.abspath("/ssl/fullchain.pem")
+    # key_path = os.path.abspath("/ssl/privkey.pem")
+
+    # uvicorn.run("voice_control_api:server", host="0.0.0.0",
+    #             port=5000, log_level="info", reload=True, ssl_certfile=cert_path, ssl_keyfile=key_path)
