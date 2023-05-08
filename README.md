@@ -7,13 +7,13 @@ The purpose of this repo is to create a MVC for cs464 capstone on the efficacy o
 ## Live Example:
 
 Application:
-www.csu-hci-experiment.online
+https://www.csu-hci-experiment.online/
 
 Analysis:
-www.csu-hci-experiment.online:5000/anova
+https://www.csu-hci-experiment.online:5000/anova
 
 API:
-www.csu-hci-experiment.online:5000/docs
+https://www.csu-hci-experiment.online:5000/docs
 
 # Pre-requisites
 
